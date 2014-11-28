@@ -11,9 +11,9 @@ def s(filename, m):
 		for sstr in all:
 			ss = sstr.split('\t')
 			s5 = int( ss[5] ) / 1000
-			if s5 <= 0:
-				continue
-			logspeed = str( int( math.log10( s5 ) + 1 ) )
+			logspeed = '0'
+			if s5 > 0:
+				logspeed = str( int( math.log10( s5 ) + 1 ) )
 			if m.has_key(ss[2] + '\t' + logspeed):
 				m[ss[2] + '\t' + logspeed] += 1
 			else:
