@@ -3,6 +3,8 @@
 import random
 import os
 import os.path
+import time
+import math
 
 def s(filename, m):
 	with open(filename) as f:
@@ -81,7 +83,10 @@ def bigAna():
 	rnum = rnum.keys()
 	print "randomNum:", len(rnum)
 
+	hit = [0,0,0,0,0]
+	id = 0
 	for ri in rnum:
+		id += 1
 		last = all[ri - 1]
 		current = all[ri]
 		m = current.split("\t")
@@ -92,17 +97,34 @@ def bigAna():
 		ccell = m[4]
 		cspeed = m[5]
 		s5 = int( ctime ) / 1000
+		s1 = time.strftime("%H",time.localtime(s5))
 		s5 = int(time.strftime("%w",time.localtime(s5)))
-		weekend = false
+		weekend = False
 		if s5 <= 5 and s5 > 0:
-			weekend = true
+			weekend = True
 		re = {}
+		ss5 = int( cspeed ) / 1000
+		logspeed = '0'
+		if ss5 > 0:
+			logspeed = str( int( math.log10( ss5 ) + 1 ) )
 #		print capp,lapp,ctime,cnet,ccell,cspeed
 		for it in applist:
 			if weekend:
-				
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
 			else:
-				re[it] = t1[lapp+"\t"+it] * t2[it+"\t"+ccell] * t3[it+"\t"+ctime] * t5[it+"\t"+cnet] * t6[it+"\t"+]
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#			print re[it]
+		re = sorted(re.items(), key=lambda d: d[1])
+#		print "result:", len(re)
+		hhit = False
+		for i in range(0,5):
+			if hhit:
+				hit[i] += 1
+				continue
+			if capp == re[len(re) -  1 - i][0]:
+				hit[i] += 1
+				hhit = True
+		print id, hit
 
 def timeTop():
 	with open('timeWeekdays') as f:
