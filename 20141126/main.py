@@ -83,6 +83,14 @@ def bigAna():
 	rnum = rnum.keys()
 	print "randomNum:", len(rnum)
 
+	max1 = max(t1.values())
+        max2 = max(t2.values())
+        max3 = max(t3.values())
+        max4 = max(t4.values())
+        max5 = max(t5.values())
+        max6 = max(t6.values())
+	print max1,max2,max3,max4,max5,max6
+
 	hit = [0,0,0,0,0]
 	id = 0
 	for ri in rnum:
@@ -110,9 +118,17 @@ def bigAna():
 #		print capp,lapp,ctime,cnet,ccell,cspeed
 		for it in applist:
 			if weekend:
-				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
+#				re[it] = t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0
+				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 			else:
-				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
+#				re[it] = t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0
+				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 #			print re[it]
 		re = sorted(re.items(), key=lambda d: d[1])
 #		print "result:", len(re)
@@ -124,7 +140,7 @@ def bigAna():
 			if capp == re[len(re) -  1 - i][0]:
 				hit[i] += 1
 				hhit = True
-		print id, hit
+		print id, hit #, capp, re[-5:0]
 
 def timeTop():
 	with open('timeWeekdays') as f:
@@ -156,5 +172,8 @@ def timeH():
 if __name__ == '__main__':
 	cata = {'1':timeH, '2':timeTop, '3':bigAna}
 	print cata
-	x = raw_input()
-	cata.get(x)()
+	try:
+		x = raw_input()
+		cata.get(x)()
+	except KeyboardInterrupt:
+		exit(0)
