@@ -19,11 +19,13 @@ def s(filename, m):
 def bigAna():
 	applist = []
 	t1 = {}
+	filter = {'com.tencent.mobileqq':1, 'com.tencent.mm':2, 'com.tencent.qqlive':3, 'com.taobao.taobao':4}
 	with open('lastAppResult') as f:
 		all = f.readlines()
 		for ss in all:
 			m = ss.split('\t')
-			applist.append(m[1])
+			if not filter.has_key(m[1]):
+				applist.append(m[1])
 			t1[m[0] + "\t" + m[1]] = int(m[2])
 	applist = {}.fromkeys(applist).keys()
 	print "App Num:", len(applist)
@@ -79,7 +81,12 @@ def bigAna():
 
 	rnum = {}
 	while len(rnum.keys()) < 1000:
-		rnum[random.randint(1, len(all))] = 1
+		ri = random.randint(1, len(all))
+		last = all[ri - 1].split("\t")
+		current = all[ri].split("\t")
+		if last[0] != current[0] or filter.has_key(last[2]) or filter.has_key(current[2]):
+			continue
+		rnum[ri] = 1
 	rnum = rnum.keys()
 	print "randomNum:", len(rnum)
 
@@ -93,12 +100,14 @@ def bigAna():
 
 	hit = [0,0,0,0,0]
 	id = 0
+	capplist = []
 	for ri in rnum:
 		id += 1
 		last = all[ri - 1]
 		current = all[ri]
 		m = current.split("\t")
 		capp = m[2]
+		capplist.append(capp)
 		lapp = last.split("\t")[2]
 		ctime = m[1]
 		cnet = m[3]
@@ -118,17 +127,17 @@ def bigAna():
 #		print capp,lapp,ctime,cnet,ccell,cspeed
 		for it in applist:
 			if weekend:
-#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
 #				re[it] = t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0
-				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
+#				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 			else:
-#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
 #				re[it] = t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0
-				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
+#				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 #			print re[it]
 		re = sorted(re.items(), key=lambda d: d[1])
 #		print "result:", len(re)
@@ -140,7 +149,8 @@ def bigAna():
 			if capp == re[len(re) -  1 - i][0]:
 				hit[i] += 1
 				hhit = True
-		print id, hit #, capp, re[-5:0]
+		print id, hit# , capp, re[-5:]
+	print len({}.fromkeys(capplist).keys())
 
 def timeTop():
 	with open('timeWeekdays') as f:
@@ -173,7 +183,8 @@ if __name__ == '__main__':
 	cata = {'1':timeH, '2':timeTop, '3':bigAna}
 	print cata
 	try:
-		x = raw_input()
-		cata.get(x)()
+		while True:
+			x = raw_input()
+			cata.get(x)()
 	except KeyboardInterrupt:
 		exit(0)
