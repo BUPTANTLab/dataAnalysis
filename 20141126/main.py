@@ -6,12 +6,16 @@ import os.path
 import time
 import math
 
+filter = {'com.tencent.mobileqq':1, 'com.tencent.mm':2, 'com.tencent.qqlive':3, 'com.taobao.taobao':4}
+
 def s(filename, m):
 	with open(filename) as f:
 		all = f.readlines()
 		last = ''
 		for sstr in all:
 			ss = sstr.split('\t')
+			if filter.has_key(ss[2]):
+				continue
 			if last != ss[2]:
 				m.append(sstr)
 				last = ss[2]
@@ -19,7 +23,6 @@ def s(filename, m):
 def bigAna():
 	applist = []
 	t1 = {}
-	filter = {'com.tencent.mobileqq':1, 'com.tencent.mm':2, 'com.tencent.qqlive':3, 'com.taobao.taobao':4}
 	with open('lastAppResult') as f:
 		all = f.readlines()
 		for ss in all:
@@ -82,10 +85,6 @@ def bigAna():
 	rnum = {}
 	while len(rnum.keys()) < 1000:
 		ri = random.randint(1, len(all))
-		last = all[ri - 1].split("\t")
-		current = all[ri].split("\t")
-		if last[0] != current[0] or filter.has_key(last[2]) or filter.has_key(current[2]):
-			continue
 		rnum[ri] = 1
 	rnum = rnum.keys()
 	print "randomNum:", len(rnum)
@@ -127,15 +126,17 @@ def bigAna():
 #		print capp,lapp,ctime,cnet,ccell,cspeed
 		for it in applist:
 			if weekend:
-				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
-#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
 #				re[it] = t4[it+"\t"+s1] if t4.has_key(it+"\t"+s1) else 0
 #				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 			else:
-				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
+#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 1 * t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 1 * t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 1 * t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 1
 #				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0 + t2[it+"\t"+ccell] if t2.has_key(it+"\t"+ccell) else 0 + t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0 + t5[it+"\t"+cnet] if t5.has_key(it+"\t"+cnet) else 0 + t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
-#				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
+				re[it] = t1[lapp+"\t"+it] if t1.has_key(lapp+"\t"+it) else 0
 #				re[it] = t3[it+"\t"+s1] if t3.has_key(it+"\t"+s1) else 0
 #				re[it] = t6[it+"\t"+logspeed] if t6.has_key(it+"\t"+logspeed) else 0
 #			print re[it]
@@ -152,6 +153,40 @@ def bigAna():
 		print id, hit# , capp, re[-5:]
 	print len({}.fromkeys(capplist).keys())
 
+def speedTop():
+        with open('avgDownSpeedResult') as f:
+                all = f.readlines()
+                ha = {}
+                for ss in all:
+                        m = ss.split('\t')
+			if not ha.has_key(m[1]):
+				ha[m[1]] = {}
+                        if ha[m[1]].has_key(m[0]):
+                                ha[m[1]][m[0]] += int(m[2])
+                        else:
+                                ha[m[1]][m[0]] = int(m[2])
+		for h in ha.keys():
+			print h, sorted(ha[h].items(), key=lambda d: d[1])[-10:]
+
+def networkTop():
+        with open('networkResult') as f:
+                all = f.readlines()
+                haw = {}
+                ham = {}
+                for ss in all:
+                        m = ss.split('\t')
+			ha = {}
+			if m[1] == 'mobile':
+				ha = ham
+			else:
+				ha = haw
+                        if ha.has_key(m[0]):
+                                ha[m[0]] += int(m[2])
+                        else:
+                                ha[m[0]] = int(m[2])
+                print "mobile", sorted(ham.items(), key=lambda d: d[1])[-10:]
+                print "wifi", sorted(haw.items(), key=lambda d: d[1])[-10:]
+
 def timeTop():
 	with open('timeWeekdays') as f:
                 all = f.readlines()
@@ -162,7 +197,7 @@ def timeTop():
                                 ha[m[0]] += int(m[2])
                         else:
                                 ha[m[0]] = int(m[2])
-		print sorted(ha.items(), key=lambda d: d[1]) 
+		print sorted(ha.items(), key=lambda d: d[1])[-10:]
 
 def timeH():
 	with open('timeWeekend') as f:
@@ -180,7 +215,7 @@ def timeH():
 		print ha
 
 if __name__ == '__main__':
-	cata = {'1':timeH, '2':timeTop, '3':bigAna}
+	cata = {'1':timeH, '2':timeTop, '3':bigAna, '4':networkTop, '5':speedTop}
 	print cata
 	try:
 		while True:
