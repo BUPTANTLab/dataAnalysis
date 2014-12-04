@@ -246,9 +246,9 @@ def timeH():
 
 if __name__ == '__main__':
 	cata = {'1':timeH, '2':timeTop, '3':bigAna, '4':networkTop, '5':speedTop}
-	print cata
 	try:
 		while True:
+			print cata
 			x = raw_input()
 			cata.get(x)()
 	except KeyboardInterrupt:
